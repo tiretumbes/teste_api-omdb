@@ -1,54 +1,22 @@
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import Detalhes from './pages/Detalhes';
 
 
-import axios from 'axios'
-import './App.css'
-import { useState } from 'react'
-
-function App() {
-  const[filmes, setFilmes] = useState([]);
-  const[busca, setBusca] = useState("");
- 
-  const chave = import.meta.env.VITE_API_KEY
-
-  const buscaFilme = async () =>{
-    try{
-        const data = await axios.get("http://www.omdbapi.com/?apikey=" + chave + "&s=" + busca);
-
-        setFilmes(data.data.Search);
-
-    }
-
-    catch(error){
-      console.log(error)
-    }
-  }
-
+export default function App() {
   return (
-    <>
-      {chave}
+    <Router>
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/detalhes">Detalhes</Link></li>
+        </ul>
+      </nav>
 
-      {
-        filmes.map((filme: any) => {
-          return(
-            <div className="filme" key={filme.imdbID}>
-              <h1>{filme.Title}</h1>
-              <h3>{filme.Year}</h3>
-              <img src={filme.Poster} alt={filme.Title} />
-            </div>
-
-            
-          )
-        }
-        )
-      } 
-
-      <div className="busca">
-
-      <input type="text" value={busca} onChange={(valor) => setBusca(valor.target.value)} />
-      <button onClick={buscaFilme}>Buscar Filmes</button>
-        </div>
-    </>
-  )
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/detalhes" element={<Detalhes />} />
+        
+      </Routes>
+    </Router>);
 }
-
-export default App
